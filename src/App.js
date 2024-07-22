@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import RegistrationForm from './components/RegistrationForm';
+import LoginForm from './components/LoginForm';
+import PostForm from './components/PostForm';
+import SearchBar from './components/SearchBar';
+import Layout from './components/Layout';
+import TierTabs from './components/TierTabs';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [posts, setPosts] = useState([]);
+
+    return (
+        <AuthProvider>
+            <Router>
+                <Layout>
+                    <SearchBar setPosts={setPosts} />
+                    <Routes>
+                        <Route path="/register" element={<RegistrationForm />} />
+                        <Route path="/login" element={<LoginForm />} />
+                        <Route path="/create-post" element={<PostForm />} />
+                        <Route path="/" element={<TierTabs posts={posts} />} />
+                    </Routes>
+                </Layout>
+            </Router>
+        </AuthProvider>
+    );
+};
 
 export default App;
