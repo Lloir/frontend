@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
@@ -8,6 +7,7 @@ import PostForm from './components/PostForm';
 import SearchBar from './components/SearchBar';
 import Layout from './components/Layout';
 import TierTabs from './components/TierTabs';
+import ProtectedPage from './components/ProtectedPage'; // Import ProtectedPage
 
 const App = () => {
     const [posts, setPosts] = useState([]);
@@ -21,6 +21,7 @@ const App = () => {
                         <Route path="/register" element={<RegistrationForm />} />
                         <Route path="/login" element={<LoginForm />} />
                         <Route path="/create-post" element={<PostForm />} />
+                        <Route path="/protected" element={<ProtectedPage />} /> {/* Add protected route */}
                         <Route path="/" element={<TierTabs posts={posts} />} />
                     </Routes>
                 </Layout>

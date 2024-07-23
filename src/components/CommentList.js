@@ -1,46 +1,36 @@
-// src/components/CommentList.js
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import AuthContext from '../contexts/AuthContext';
+import React, { useEffect, useState } from 'react';
+import api from '../api';
 
 const CommentList = ({ postId }) => {
     const [comments, setComments] = useState([]);
-    const [content, setContent] = useState('');
-    const { user } = useContext(AuthContext);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchComments = async () => {
-            const response = await axios.get(`/api/comments/${postId}`);
-            setComments(response.data);
+            try {
+                const res = await api.get(`/comments/${postId}`);
+                setComments(res.data);
+            } catch (err) {
+                setError(err.response?.data?.message || 'Error fetching comments');
+            }
         };
-        fetchComments();
-    }, [postId]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(`/api/comments/${postId}`, { content });
-            setComments([...comments, response.data]);
-            setContent('');
-        } catch (error) {
-            alert('Error posting comment');
+        if (postId) {
+            fetchComments();
+        } else {
+            setError('Post ID is required to fetch comments');
         }
-    };
+    }, [postId]);
 
     return (
         <div>
-            <h3>Comments</h3>
-            {comments.map(comment => (
-                <div key={comment._id} className="comment">
-                    <p>{comment.content} - by {comment.userId.username}</p>
-                </div>
-            ))}
-            {user && (
-                <form onSubmit={handleSubmit} className="comment-form">
-                    <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-                    <button type="submit" className="btn btn-primary">Post Comment</button>
-                </form>
-            )}
+            <h2>Comments</h2>
+            {error && <div>{error}</div>}
+            <ul>
+                {comments.map((comment) => (
+                    <li key={comment.id}>{comment.content}</li>
+                ))}
+            </ul>
         </div>
     );
 };
