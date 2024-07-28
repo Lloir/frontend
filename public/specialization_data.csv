@@ -1,0 +1,32 @@
+name,female_name,tier
+"Apprentice","Apprentice",3
+"Assassin","Assassin",9
+"Bard","Bard",7
+"Beastmaster","Beastmaster",7
+"Berserker","Berserker",5
+"Brawler","Brawler",3
+"Cataphract","Cataphract",9
+"Charmer","Charmer",9
+"Chronomancer","Chronomancer",9
+"Cleric","Cleric",5
+"Duelist","Duelist",5
+"Guardian","Guardian",5
+"High Cleric","High Cleric",9
+"Hunter","Hunter",5
+"Inquisitor","Inquisitor",7
+"Magus","Magus",7
+"Maji","Maji",9
+"Merchant","Merchant",5
+"Pikeman","Shieldmaiden",5
+"Raider","Raider",9
+"Ranger","Ranger",7
+"Scholar","Scholar",5
+"Seeker","Seeker",5
+"Sequencer","Sequencer",9
+"Stargazer","Stargazer",5
+"Swashbuckler","Swashbuckler",7
+"Tamer","Tamer",9
+"Time Mage","Time Mage",7
+"Trickster","Trickster",3
+"Warden","Warden",7
+"Zwei-fencer","Zwei-fencer",7

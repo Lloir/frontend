@@ -1,4 +1,3 @@
-// src/components/TierTabs.js
 import React, { useState } from 'react';
 import { Tab, Nav, Row, Col } from 'react-bootstrap';
 import PostList from './PostList';
@@ -19,6 +18,8 @@ const classes = {
 
 const TierTabs = ({ posts }) => {
     const [activeKey, setActiveKey] = useState('T1');
+
+    console.log('Rendering TierTabs with posts:', posts);
 
     return (
         <Tab.Container id="left-tabs-example" activeKey={activeKey} onSelect={(k) => setActiveKey(k)}>

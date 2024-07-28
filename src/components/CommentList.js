@@ -27,7 +27,7 @@ const CommentList = ({ postId }) => {
             <h2>Comments</h2>
             {error && <div>{error}</div>}
             <ul>
-                {comments.map((comment) => (
+                {Array.isArray(comments) && comments.map((comment) => (
                     <li key={comment.id}>{comment.content}</li>
                 ))}
             </ul>

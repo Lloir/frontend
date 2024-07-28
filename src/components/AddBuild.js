@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import api from '../api';
+// src/components/AddBuild.js
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api, { refreshCsrfToken } from '../api';
+import Papa from 'papaparse';
 
 const AddBuild = ({ onBuildAdded }) => {
     const [title, setTitle] = useState('');
@@ -9,13 +12,40 @@ const AddBuild = ({ onBuildAdded }) => {
     const [media, setMedia] = useState([]);
     const [youtubeLink, setYoutubeLink] = useState('');
     const [error, setError] = useState('');
+    const [classOptions, setClassOptions] = useState([]);
+    const [specializationOptions, setSpecializationOptions] = useState([]);
+    const navigate = useNavigate();
 
-    const classOptions = [
-        'Class1',
-        'Class2',
-        'Class3',
-        // Add more classes as needed
-    ];
+    useEffect(() => {
+        refreshCsrfToken();
+        fetchOptions();
+    }, []);
+
+    const fetchOptions = async () => {
+        try {
+            console.log('Fetching class data...');
+            const classData = await fetch('/class_data.csv');
+            const classText = await classData.text();
+            console.log('Class data fetched:', classText);
+
+            console.log('Fetching specialization data...');
+            const specializationData = await fetch('/specialization_data.csv');
+            const specializationText = await specializationData.text();
+            console.log('Specialization data fetched:', specializationText);
+
+            const classResults = Papa.parse(classText, { header: true });
+            const specializationResults = Papa.parse(specializationText, { header: true });
+
+            console.log('Parsed class data:', classResults);
+            console.log('Parsed specialization data:', specializationResults);
+
+            setClassOptions(classResults.data.map(item => item.name));
+            setSpecializationOptions(specializationResults.data.map(item => item.name));
+        } catch (err) {
+            console.error('Error fetching CSV data:', err);
+            setError('Error fetching class and specialization data');
+        }
+    };
 
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
@@ -43,12 +73,7 @@ const AddBuild = ({ onBuildAdded }) => {
                 }
             });
             onBuildAdded(res.data);
-            setTitle('');
-            setContent('');
-            setPostClass('');
-            setSpecialization('');
-            setMedia([]);
-            setYoutubeLink('');
+            navigate('/'); // Redirect to main page after successful submission
         } catch (err) {
             console.error('Error adding build:', err.response?.data || err.message);
             setError(err.response?.data?.message || 'Error adding build');
@@ -104,11 +129,17 @@ const AddBuild = ({ onBuildAdded }) => {
             </div>
             <div>
                 <label>Specialization (Optional)</label>
-                <input
-                    type="text"
+                <select
                     value={specialization}
                     onChange={(e) => setSpecialization(e.target.value)}
-                />
+                >
+                    <option value="">Select Specialization</option>
+                    {specializationOptions.map((specializationOption) => (
+                        <option key={specializationOption} value={specializationOption}>
+                            {specializationOption}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div>
                 <label>Media (Optional)</label>
